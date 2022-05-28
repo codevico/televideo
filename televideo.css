@@ -1,0 +1,83 @@
+@font-face {
+    font-family: Televideo;
+    src: url('res/televideo.ttf');
+}
+@font-face {
+    font-family: 'Televideo Title';
+    src: url('res/I-pixel-u.ttf');
+}
+* { margin: 0; padding: 0; }
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #111;
+}
+.tv-screen-wrapper {
+    height: 100%;
+    aspect-ratio: 4 / 3;
+    background: black;
+    padding: 20px;
+}
+.tv-screen {
+    color: white;
+    font-family: Televideo, monospace;
+    font-size: 28px;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+.tv-row {
+    display: flex;
+    flex-direction: row;
+}
+.tv-column {
+    display: flex;
+    flex-direction: column;
+}
+.tv-page-title {
+    background: repeating-linear-gradient(
+        0,
+        #0000ff,
+        #0000ff 20px,
+        black 20px,
+        black 40px
+    );
+    text-transform: uppercase;
+    font-size: 2.2em;
+    color: #ffff00;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Televideo Title';
+    font-weight: bold;
+}
+.tv-page-title p {
+    height: 60px;
+    line-height: 52px;
+}
+.tv-element {
+    margin-top: 15px;
+}
+.tv-yellow {
+    color: #ffff00;
+}
+.tv-green {
+    color: #00da00;
+}
+.tv-blue {
+    color: #0000ff;
+}
+.tv-uppercase {
+    text-transform: uppercase;
+}
+.tv-right {
+    margin-left: auto;
+}
+.tv-subtitle:hover {
+    background: #555;
+    cursor: pointer;
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Televideo</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="televideo.css">
+    </head>
+    <body>
+        <div class="tv-screen-wrapper"></div>
+        <script src="televideo.js"></script>
+        <script>
+            televideo.init(document.querySelector('.tv-screen-wrapper'))
+            televideo.page_title = 'Notizie'
+
+            televideo.add_element('Titolo di prova', 'Sottotitolo di prova', 123, function() { console.log('Cliccato!') })
+            televideo.add_element('Maltempo, allerta gialla in 7 regioni', 'Piogge e netti cali di temperatura', 124)
+            televideo.add_element('Un uomo e\'caduto nel fiume a Lego City', 'Chiama l\'elisoccorso hey!', 125)
+            televideo.add_element('Sezione senza pagina', 'Qui manca il numero della pagina')
+
+            televideo.render()
+        </script>
+    </body>
+</html>
