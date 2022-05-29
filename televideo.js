@@ -44,7 +44,7 @@
 
     televideo.get_header_title = function() {
 
-        return 'TELEVIDEO ' + this.get_formatted_date()
+        return 'TELEVIDEO <span class="tv-header-date">' + this.get_formatted_date() + '</span>'
 
     }
 
@@ -72,7 +72,7 @@
 
         let el_html_header_right = document.createElement('div')
         el_html_header_right.classList.add('tv-right')
-        el_html_header_right.innerText = this.get_header_title()
+        el_html_header_right.innerHTML = this.get_header_title()
         el_html_header.append(el_html_header_right)
 
         this.screen.append(el_html_header)
