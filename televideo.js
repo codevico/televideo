@@ -5,20 +5,17 @@
     televideo.wrapper = document.querySelector('.tv-screen-wrapper')
     televideo.screen = null
 
-    televideo.page_title = null
+    televideo.pages = []
+    televideo.selected_page = null
 
-    televideo.elements = [
-        /*{
-            title: 'Titolo di prova',
-            subtitle: 'Sottotitolo di prova',
-            page_index: 100,
-            onclick: function() { console.log('clicked!') }
-        }*/
-    ]
+    televideo.init = function(options) {
 
-    televideo.init = function(target) {
+        if (options.target) this.set_wrapper(options.target)
 
-        if (target) this.set_wrapper(target)
+        if (options.pages) {
+            this.pages = options.pages
+            this.selected_page = this.pages[0]
+        }
 
         this.wrapper.innerHTML = ''
 
@@ -33,6 +30,7 @@
     televideo.set_wrapper = function(target) {
 
         this.wrapper = target
+        this.wrapper.classList.add('tv-screen-wrapper')
 
     }
 
@@ -44,22 +42,19 @@
 
     televideo.get_header_title = function() {
 
-        return 'TELEVIDEO <span class="tv-header-date">' + this.get_formatted_date() + '</span>'
-
-    }
-
-    televideo.get_formatted_date = function() {
-
-        // Sa 28 Mag 14:31:27
         let now = new Date()
-        return now.toLocaleString()
+        return 'TELEVIDEO <span class="tv-header-date">' +
+            this.get_day_of_week(now) + ' ' +
+            now.getDate() + ' ' +
+            this.get_month(now) + ' ' +
+            this.get_formatted_hour(now.getHours()) + ':' + this.get_formatted_hour(now.getMinutes()) + ':' + this.get_formatted_hour(now.getSeconds()) +
+            '</span>'
 
     }
 
     televideo.render = function(target) {
 
         this.screen.innerHTML = ''
-        let _this = this
 
         let el_html_header = document.createElement('div')
         el_html_header.classList.add('tv-row')
@@ -67,7 +62,7 @@
         
         let el_html_header_left = document.createElement('div')
         el_html_header_left.classList.add('tv-green')
-        el_html_header_left.innerText = '100.1'
+        el_html_header_left.innerText = this.selected_page ? (this.selected_page.page_index + '.0') : 100.0
         el_html_header.append(el_html_header_left)
 
         let el_html_header_right = document.createElement('div')
@@ -77,20 +72,39 @@
 
         this.screen.append(el_html_header)
 
-        if (this.page_title) {
+        if (this.selected_page) this.render_page(this.selected_page)
+
+    }
+
+    televideo.select_page = function(page_index) {
+
+        let page_to_select = this.pages.find(function(page) { return page.page_index === page_index })
+
+        if (page_to_select) {
+            this.selected_page = page_to_select
+            this.render()
+        }
+
+    }
+
+    televideo.render_page = function(page) {
+
+        let _this = this
+
+        if (page.page_title) {
 
             let el_html_page_title = document.createElement('div')
             el_html_page_title.classList.add('tv-page-title')
 
             let el_html_page_title_p = document.createElement('p')
-            el_html_page_title_p.innerText = this.page_title
+            el_html_page_title_p.innerText = page.page_title
 
             el_html_page_title.append(el_html_page_title_p)
             _this.screen.append(el_html_page_title)
 
         }
 
-        this.elements.forEach(function(element) {
+        page.elements.forEach(function(element) {
 
             let el_html = document.createElement('div')
             el_html.classList.add('tv-column')
@@ -124,10 +138,71 @@
 
             if (element.onclick) {
                 el_html_subtitle.addEventListener('click', element.onclick)
+            } else {
+                el_html_subtitle.addEventListener('click', function() { _this.select_page(element.page_index) })
             }
 
         })
 
+    }
+
+    televideo.get_formatted_date = function() {
+
+        // Sa 28 Mag 14:31:27
+        let now = new Date()
+        return now.toLocaleString()
+
+    }
+
+    televideo.get_day_of_week = function(date) {
+        switch (date.getDay()) {
+            case 0:
+                return 'Do'
+            case 1:
+                return 'Lu'
+            case 2:
+                return 'Ma'
+            case 3:
+                return 'Me'
+            case 4:
+                return 'Gi'
+            case 5:
+                return 'Ve'
+        }
+        return 'Sa'
+    }
+
+    televideo.get_month = function(date) {
+        switch (date.getMonth()) {
+            case 0:
+                return 'Gen'
+            case 1:
+                return 'Feb'
+            case 2:
+                return 'Mar'
+            case 3:
+                return 'Apr'
+            case 4:
+                return 'Mag'
+            case 5:
+                return 'Giu'
+            case 6:
+                return 'Lug'
+            case 7:
+                return 'Ago'
+            case 8:
+                return 'Set'
+            case 9:
+                return 'Ott'
+            case 10:
+                return 'Nov'
+            case 11:
+                return 'Dic'
+        }
+    }
+
+    televideo.get_formatted_hour = function(number) {
+        return (number < 10) ? ('0' + number) : number
     }
 
     if (typeof module !== 'undefined' && module.exports) {

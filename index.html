@@ -10,13 +10,47 @@
         <div class="tv-screen-wrapper"></div>
         <script src="televideo.js"></script>
         <script>
-            televideo.init(document.querySelector('.tv-screen-wrapper'))
-            televideo.page_title = 'Notizie'
+            televideo.init({
+                target: document.querySelector('.tv-screen-wrapper'),
+                pages: [
+                    {
+                        page_title: 'Home',
+                        page_index: 100,
+                        elements: [
+                            {
+                                title: 'Titolo di prova',
+                                subtitle: 'Sottotitolo di prova',
+                                page_index: 123,
+                                onclick: function() { console.log('Cliccato!') }
+                            },
+                            {
+                                title: "Link ad un'altra pagina",
+                                subtitle: 'Clicca qui per cambiare pagina',
+                                page_index: 124
+                            },
+                            {
+                                title: 'Maltempo, allerta gialla in 7 regioni',
+                                subtitle: 'Piogge e netti cali di temperatura',
+                                page_index: 125
+                            }
+                        ]
+                    },
+                    {
+                        page_title: 'Seconda pagina',
+                        page_index: 124,
+                        elements: [
+                            {
+                                title: 'Torna alla home',
+                                subtitle: 'Clicca qui per tornare alla home',
+                                page_index: 100
+                            }
+                        ]
+                    }
+                ]
+            })
 
-            televideo.add_element('Titolo di prova', 'Sottotitolo di prova', 123, function() { console.log('Cliccato!') })
-            televideo.add_element('Maltempo, allerta gialla in 7 regioni', 'Piogge e netti cali di temperatura', 124)
-            televideo.add_element('Un uomo e\'caduto nel fiume a Lego City', 'Chiama l\'elisoccorso hey!', 125)
-            televideo.add_element('Sezione senza pagina', 'Qui manca il numero della pagina')
+            //televideo.add_element('Un uomo e\'caduto nel fiume a Lego City', 'Chiama l\'elisoccorso hey!', 125)
+            //televideo.add_element('Sezione senza pagina', 'Qui manca il numero della pagina')
 
             televideo.render()
         </script>
