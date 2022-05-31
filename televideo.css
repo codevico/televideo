@@ -19,6 +19,8 @@ body {
     aspect-ratio: 4 / 3;
     background: black;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 @media only screen and (max-width: 768px) {
     .tv-screen-wrapper {
@@ -36,6 +38,11 @@ body {
     display: flex;
     flex-direction: column;
     user-select: none;
+    flex-grow: 1;
+}
+.tv-footer {
+    margin-top: auto;
+    border-bottom: 6px solid #0000ff;
 }
 .tv-row {
     display: flex;
@@ -75,6 +82,9 @@ body {
 }
 .tv-element {
     margin-top: 15px;
+}
+.tv-paragraph {
+    hyphens: auto;
 }
 .tv-yellow {
     color: #ffff00;

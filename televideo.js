@@ -13,8 +13,19 @@
         if (options.target) this.set_wrapper(options.target)
 
         if (options.pages) {
+
             this.pages = options.pages
-            this.selected_page = this.pages[0]
+            if (window.location.hash) {
+                let preselected_index = parseInt(window.location.hash.replace('#', ''))
+                if (!isNaN(preselected_index)) {
+                    let preselected_page = this.find_page(preselected_index)
+                    if (preselected_page) {
+                        this.selected_page = preselected_page
+                    }
+                }
+            }            
+            if (this.selected_page === null) this.selected_page = this.pages[0]
+
         }
 
         this.wrapper.innerHTML = ''
@@ -24,6 +35,11 @@
 
         this.wrapper.append(screen)
         this.screen = screen
+
+        let _this = this
+        window.addEventListener('hashchange', function() {
+            _this.select_page_by_index(parseInt(window.location.hash.replace('#', '')), false)
+        })
 
     }
 
@@ -74,16 +90,35 @@
 
         if (this.selected_page) this.render_page(this.selected_page)
 
+        let el_html_footer = document.createElement('div')
+        el_html_footer.classList.add('tv-footer')
+        this.screen.append(el_html_footer)
+
     }
 
-    televideo.select_page = function(page_index) {
+    televideo.select_page = function(page) {
 
-        let page_to_select = this.pages.find(function(page) { return page.page_index === page_index })
-
-        if (page_to_select) {
-            this.selected_page = page_to_select
+        if (this.selected_page === null || this.selected_page.page_index !== page.page_index) {
+            window.location.hash = page.page_index
+            this.selected_page = page
             this.render()
         }
+
+    }
+
+    televideo.select_page_by_index = function(page_index) {
+
+        let page_to_select = this.find_page(page_index)
+
+        if (page_to_select) {
+            this.select_page(page_to_select)
+        }
+
+    }
+
+    televideo.find_page = function(page_index) {
+
+        return this.pages.find(function(page) { return page.page_index === page_index })
 
     }
 
@@ -110,38 +145,50 @@
             el_html.classList.add('tv-column')
             el_html.classList.add('tv-element')
 
-            let el_html_title = document.createElement('div')
-            el_html_title.classList.add('tv-row')
-            el_html_title.classList.add('tv-uppercase')
-            el_html_title.innerText = element.title
-            el_html.append(el_html_title)
+            if (element.type === 'link') {
 
-            let el_html_subtitle = document.createElement('div')
-            el_html_subtitle.classList.add('tv-row')
-            el_html_subtitle.classList.add('tv-subtitle')
+                let el_html_title = document.createElement('div')
+                el_html_title.classList.add('tv-row')
+                el_html_title.classList.add('tv-uppercase')
+                el_html_title.innerText = element.title
+                el_html.append(el_html_title)
 
-            let el_html_green = document.createElement('div')
-            el_html_green.classList.add('tv-green')
-            el_html_green.innerText = element.subtitle
-            el_html_subtitle.append(el_html_green)
+                let el_html_subtitle = document.createElement('div')
+                el_html_subtitle.classList.add('tv-row')
+                el_html_subtitle.classList.add('tv-subtitle')
 
-            if (element.page_index) {
-                let el_html_index = document.createElement('div')
-                el_html_index.classList.add('tv-yellow')
-                el_html_index.classList.add('tv-right')
-                el_html_index.innerText = element.page_index
-                el_html_subtitle.append(el_html_index)
+                let el_html_green = document.createElement('div')
+                el_html_green.classList.add('tv-green')
+                el_html_green.innerText = element.subtitle
+                el_html_subtitle.append(el_html_green)
+
+                if (element.page_index) {
+                    let el_html_index = document.createElement('div')
+                    el_html_index.classList.add('tv-yellow')
+                    el_html_index.classList.add('tv-right')
+                    el_html_index.innerText = element.page_index
+                    el_html_subtitle.append(el_html_index)
+                }
+
+                el_html.append(el_html_subtitle)
+
+                if (element.onclick) {
+                    el_html_subtitle.addEventListener('click', element.onclick)
+                } else {
+                    el_html_subtitle.addEventListener('click', function() { _this.select_page_by_index(element.page_index) })
+                }
+
+
+            } else if (element.type === 'paragraph') {
+
+                let el_html_paragraph = document.createElement('span')
+                el_html_paragraph.classList.add('tv-paragraph')
+                el_html_paragraph.innerText = element.text
+                el_html.append(el_html_paragraph)
+
             }
 
-            el_html.append(el_html_subtitle)
             _this.screen.append(el_html)
-
-            if (element.onclick) {
-                el_html_subtitle.addEventListener('click', element.onclick)
-            } else {
-                el_html_subtitle.addEventListener('click', function() { _this.select_page(element.page_index) })
-            }
-
         })
 
     }
